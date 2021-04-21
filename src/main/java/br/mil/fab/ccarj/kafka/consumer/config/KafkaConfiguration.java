@@ -1,6 +1,6 @@
-package com.techprimers.kafka.springbootkafkaconsumerexample.config;
+package br.mil.fab.ccarj.kafka.consumer.config;
 
-import com.techprimers.kafka.springbootkafkaconsumerexample.model.User;
+import br.mil.fab.ccarj.kafka.consumer.model.EnrollmentMessage;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +13,8 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import java.util.HashMap;
 import java.util.Map;
+
+
 
 @EnableKafka
 @Configuration
@@ -40,7 +42,7 @@ public class KafkaConfiguration {
 
 
     @Bean
-    public ConsumerFactory<String, User> userConsumerFactory() {
+    public ConsumerFactory<String, EnrollmentMessage> userConsumerFactory() {
         Map<String, Object> config = new HashMap<>();
 
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
@@ -48,12 +50,12 @@ public class KafkaConfiguration {
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(),
-                new JsonDeserializer<>(User.class));
+                new JsonDeserializer<>(EnrollmentMessage.class));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, User> userKafkaListenerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, User> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, EnrollmentMessage> userKafkaListenerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, EnrollmentMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(userConsumerFactory());
         return factory;
     }
